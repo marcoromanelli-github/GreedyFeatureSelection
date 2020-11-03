@@ -26,11 +26,14 @@ namespace gfs_manager_space {
 
         void gfsPickNextFeature();
 
-        float computeEntropy(vector<string> feature_array,vector<string> labels_array);
+        float computeEntropy(vector<string> feature_array, vector<string> labels_array);
 
         vector<string> newFeature(vector<string> S_base, vector<string> feature_array);
 
+        int getIndexMaxValueMap(map<int, float> map_obj);
+
     private:
+        int rows;
         vector<string> available_strategies = {"renyi", "shannon"};
         vector<string> labels;
         vector<string> S;   // contains symbols corresponding to the features chosen so far

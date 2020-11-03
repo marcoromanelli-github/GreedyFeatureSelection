@@ -9,13 +9,13 @@ using namespace gfs_manager_space;
 
 gfsManager::gfsManager(vector<vector<string>> dataset, vector<string> labels_input, string strategy_arg) {
     this->labels = labels_input;
-    int rows = dataset.size();
-    if (rows == 0) {
+    this->rows = dataset.size();
+    if (this->rows == 0) {
         throw std::invalid_argument("no samples available");
     } else {
         for (int col_idx = 0; col_idx < dataset[0].size(); ++col_idx) {
             vector<string> column;
-            for (int i = 0; i < rows; ++i) {
+            for (int i = 0; i < this->rows; ++i) {
                 column.push_back(dataset.at(i).at(col_idx));
             }
             this->F.insert(make_pair(col_idx, column));
@@ -38,6 +38,10 @@ vector<string> gfsManager::getFVal(int key) {
 }
 
 vector<int> gfsManager::greedyAlgorithm(int feat_card) {
+    if (feat_card < 1 || feat_card >= this->rows) {
+        throw std::invalid_argument("required number of feature to select must be an integer greater than 0 and "
+                                    "less than the total number of available features");
+    }
     for (int step = 0; step, feat_card; ++step) {   //  feature selection step: step
 
     }
@@ -49,15 +53,28 @@ void gfsManager::gfsPickNextFeature() {
     map<int, float> entropy_val;  // contains all the entropy values at a certain step: the argmax corresponds to
     // the next chosen feature unequivocally identified by the int id
 
-    if (this->S.empty()) {   //  first step
-        for (it = this->F.begin(); it != this->F.end(); it++) {
-            vector<string> S_t = newFeature(this->S, it->second); // contains all the new possible symbols for a
-            // given new feature
-            entropy_val.insert(make_pair(it->first, computeEntropy(S_t, this->labels)));//
-        }
-    } else {   //  next steps
-
+    for (it = this->F.begin(); it != this->F.end(); it++) {
+        vector<string> S_t = newFeature(this->S, it->second); // contains all the new possible symbols for a
+        // given new feature
+        entropy_val.insert(make_pair(it->first, computeEntropy(S_t, this->labels)));//
     }
+    max_entropy_index = getIndexMaxValueMap(entropy_val);
+    this->S_index.push_back(max_entropy_index);
+    this->F.erase(max_entropy_index);
+}
+
+int gfsManager::getIndexMaxValueMap(map<int, float> map_obj) {
+    float current_max = -numeric_limits<float>::infinity();
+    int current_max_id = -1;
+
+    map<int, float>::iterator it;
+    for (it = map_obj.begin(); it != map_obj.end(); it++) {
+        if (it->second > current_max) {
+            current_max = it->second;
+            current_max_id = it->first;
+        }
+    }
+    return current_max_id;
 }
 
 vector<string> gfsManager::newFeature(vector<string> S_base, vector<string> feature_array) {
