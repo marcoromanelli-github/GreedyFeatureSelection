@@ -28,10 +28,6 @@ namespace gfs_manager_space {
 
         float computeEntropy(vector<string> feature_array, vector<string> labels_array);
 
-        vector<string> newFeature(vector<string> S_base, vector<string> feature_array);
-
-        int getIndexMaxValueMap(map<int, float> map_obj);
-
     private:
         int rows;
         vector<string> available_strategies = {"renyi", "shannon"};
@@ -48,5 +44,6 @@ namespace gfs_manager_space {
 
 template<typename T>
 static bool isInList(T element, vector<T> the_list);
-
+static vector<string> newFeature(vector<string> S_base, vector<string> feature_array);
+static int getIndexMaxValueMap(map<int, float> map_obj);
 #endif //GREEDYFEATURESELECTION_GFS_H

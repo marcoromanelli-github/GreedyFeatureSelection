@@ -58,40 +58,9 @@ void gfsManager::gfsPickNextFeature() {
         // given new feature
         entropy_val.insert(make_pair(it->first, computeEntropy(S_t, this->labels)));//
     }
-    max_entropy_index = getIndexMaxValueMap(entropy_val);
+    int max_entropy_index = getIndexMaxValueMap(entropy_val);
     this->S_index.push_back(max_entropy_index);
     this->F.erase(max_entropy_index);
-}
-
-int gfsManager::getIndexMaxValueMap(map<int, float> map_obj) {
-    float current_max = -numeric_limits<float>::infinity();
-    int current_max_id = -1;
-
-    map<int, float>::iterator it;
-    for (it = map_obj.begin(); it != map_obj.end(); it++) {
-        if (it->second > current_max) {
-            current_max = it->second;
-            current_max_id = it->first;
-        }
-    }
-    return current_max_id;
-}
-
-vector<string> gfsManager::newFeature(vector<string> S_base, vector<string> feature_array) {
-    vector<string> new_feature;
-
-    if (S_base.empty()) {
-        return feature_array;
-    } else {
-        if ((S_base.size() != feature_array.size()) || (feature_array.empty())) {
-            throw std::invalid_argument("arrays' dimensions mismatch");
-        } else {
-            for (int i = 0; i < S_base.size(); ++i) {
-                new_feature.push_back(S_base.at(i) + "_" + feature_array.at(i));
-            }
-        }
-        return new_feature;
-    }
 }
 
 float gfsManager::computeEntropy(vector<string> feature_array, vector<string> labels_array) {
@@ -114,6 +83,37 @@ static bool isInList(T element, vector<T> the_list) {
         }
     } else {
         return false;
+    }
+}
+
+static int getIndexMaxValueMap(map<int, float> map_obj) {
+    float current_max = -numeric_limits<float>::infinity();
+    int current_max_id = -1;
+
+    map<int, float>::iterator it;
+    for (it = map_obj.begin(); it != map_obj.end(); it++) {
+        if (it->second > current_max) {
+            current_max = it->second;
+            current_max_id = it->first;
+        }
+    }
+    return current_max_id;
+}
+
+static vector<string> newFeature(vector<string> S_base, vector<string> feature_array) {
+    vector<string> new_feature;
+
+    if (S_base.empty()) {
+        return feature_array;
+    } else {
+        if ((S_base.size() != feature_array.size()) || (feature_array.empty())) {
+            throw std::invalid_argument("arrays' dimensions mismatch");
+        } else {
+            for (int i = 0; i < S_base.size(); ++i) {
+                new_feature.push_back(S_base.at(i) + "_" + feature_array.at(i));
+            }
+        }
+        return new_feature;
     }
 }
 
