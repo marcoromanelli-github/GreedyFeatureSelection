@@ -1,3 +1,6 @@
+[![Documentation](https://img.shields.io/badge/Documentation-yes-blue)](https://img.shields.io/badge/Documentation-yes-blue)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 # GreedyFeatureSelection
 
 Perform greedy feature selection using either Shannon entropy or Rényi min-entropy, exploiting the power of C++ Python
